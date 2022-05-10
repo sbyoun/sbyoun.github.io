@@ -1,0 +1,207 @@
+---
+layout: post
+title:  "Looper: An end-to-end ML platform for product decisions"
+categories: MLplatform
+---
+
+[https://arxiv.org/pdf/2110.07554.pdf](https://arxiv.org/pdf/2110.07554.pdf)
+
+**Data-centric (software-centric)** General-purpose **Vertical** ML platform
+
+소프트웨어 제품 개발에서 손쉬운 ML을 통한 의사결정을 지원하기 위한 메타 내부 ML 플랫폼
+
+주요 적용 사례
+
+*   개인화 경험 : 유저 관여 이력에 기반한 개인화된 경험 생성, 예를 들어, 사용할거 같은 고객에만 새로운 기능 보여주기
+    
+*   랭킹 : 유저 사용성 향상을 위한 아이템 순서 랭킹 , 예를 들어, 아이템 피드 개인화
+    
+*   Prefetching/precomputing : 사용의 예측 가능성에 기반한 데이터/자원 의 미리 배치/ 계산
+    
+*   Notifications/prompts 유용할 것 같은 고객에게만 보내기
+    
+*   Value estimation : 리그레션 과제, 예를 들어, 데이터 쿼리의 메모리 사용량 및 지연
+    
+
+### Data-centric ML development
+
+*   ML 개발의 집중이 모델에서, 데이터로 ([https://ljvmiranda921.github.io/notebook/2021/07/30/data-centric-ml/](https://ljvmiranda921.github.io/notebook/2021/07/30/data-centric-ml/) )
+    
+*   ML 모델 학습과 개발에 비해서 데이터 적절성은 관과 되어와서, 제품 개발 플랫폼에서 오토메이션 같은걸 통해서 부지런하게 이러한 누락을 해결해야만 했음 ( [https://research.google/pubs/pub49953/](https://research.google/pubs/pub49953/))
+    
+*   앤드류 응 은 'ML 의 80%가 데이터 준비라고 다들 농담은 하면서, 실제로는 아무도 신경쓰는거 같지 않다'고 함 ([https://analyticsindiamag.com/big-data-to-good-data-andrew-ng-urges-ml-community-to-be-more-data-centric-and-less-model-centric/](https://analyticsindiamag.com/big-data-to-good-data-andrew-ng-urges-ml-community-to-be-more-data-centric-and-less-model-centric/) )
+    
+*   **software-centric ML integration** 은 모델과 데이터셋을 직접적으로 다루는 어플리케이션 코드 대신에 API를 통한 데이터 수집과 의사결정
+    
+
+### Vertical ML platform
+
+*   사내 서비스 예시 : Apple’s Overton ([https://arxiv.org/abs/1909.05372](https://arxiv.org/abs/1909.05372) ), Uber’s Michelangelo ([https://eng.uber.com/michelangelo-machine-learning-platform/](https://eng.uber.com/michelangelo-machine-learning-platform/) )
+    
+    *   클라우드 예시: Google’s Vertex, Microsoft’s Azure Personalizer([https://arxiv.org/abs/1606.03966](https://arxiv.org/abs/1606.03966) ), Amazon Personalize
+        
+*   ML 전체 생명 주기를 지원하고, 진입장벽을 낮춤, 단지 ML 컴포넌트의 재사용만 장려할뿐 아니라, 워크플로우도 재사용 장려
+    
+*   공통의 테마는 엔지니어를 도와서, 코드 작성 없이 딥러닝 응용을 배포하고 만듬 via high-level, declarative abstractions
+    
+*   smart strategies (smart strategies : 소프트웨어 제품 개발에서 개인화된 (personalized) 의사결정) 는 end-to-end ML 생명주기 관리를 제공하기 위해서 horizontal platforms 위에 만드는 general-purpose vertical platforms 를 필요로 함
+    
+    *   horizontal ML platform : Tensorflow, PyTorch, 일반적 ML 태스크를 위한 모델링에 집중, 하드웨어 가속, 애플리케이션 개발을 위한 툴박스로 역할
+        
+*   specialized end-to-end 버티칼 플랫폼은 핵심 제품 기능 ( flagship product functionalities) 을 주도, 예를 들어, 구글, 페이스북, 링크드인, 넷플릭스 같은 대형 인터넷 회사의 추천
+    
+    *   또한, 소프트웨어 개발, 코드 퀄리티 체크, 소팅과 서칭에서의 최적화 알고리즘에도 적용
+        
+
+![](/assets/3239051731/3239411990.png?width=680)
+
+### Looper
+
+*   data-driven real-time smart strategies 를 지원하는 a general-purpose vertical end-to-end ML platform
+    
+*   적절한 복잡도의 모델의 빠르고, 적은 노력의 배포를 위한 메타의 내부 ML 플랫폼
+    
+*   GUI를 통한 smart strategies 의 전체 생명주기의 코딩 없는 관리 지원하는 declarative ML system
+    
+
+ML for smart strategies
+-----------------------
+
+*   아래와 같은 주요 의사결정 포인트에서의 smart strategies를 타겟으로 함
+    
+    *   application settings and preferences 기본 설정으로 할지, 유저 특화 설정으로 할지
+        
+    *   adaptive interfaces 고객에게 특정 옵션들을 보일지 말지
+        
+    *   광고나 유저 알람의 빈도의 통제
+        
+    *   지연을 감소시키기 위한 미리 배치와 미리 계산
+        
+    *   가능한 행동의 우선순위와 내용의 랭킹
+        
+
+### Modeling approaches for smart strategies
+
+*   스마트 전략은 supervised learning, contextual bandits, and reinforcement learning 의 다양한 형태로 구현될수 있음
+    
+*   제품 의사 결정 문제는 아래의 2가지를 요구함
+    
+    *   제품 목표로 근사(approximate) 하기 위한 **ML optimization objective**
+        
+        *   예측가능한 결과로 제품 목표를 근사 (proxy, surrogate objectives) 가 산업 사례와 추상적인 최적화 목표를 갖는 존재하는 ML 모델에 의한 연구와의 가장 큰 차이점
+            
+        *   좋은 프록시 오브젝티브는 쉽게 측정가능하고 합리적으로 예측가능 해야함
+            
+        *   추천 시스템에서 대리(surrogate) 러닝 문제는 a/b 테스팅 성능의 큰 중요성을 가지고,오프라인 실험에서는 측정을 어렵게 함
+            
+    *   objective 예측을 단일 결정으로 전환하기 위한 **decision policy**
+        
+
+### Extending end-to-end ML for smart strategies
+
+*   **Software-centric ML integration** 은 데이터 수집과 의사 결정을 platform API 를 통해서 완전히 관리, ML 설정은 declarative programming 혹은 GUI 을 통해서 추상화될수 있음
+    
+*   **End-to-end AutoML** 모델 퀄리티와 계산 리소스 간의 트레이트 오프도 최적화하여 피쳐, 파라미터 및 모델 구조 결정하고, 장기적 제품 목표를 위한 디시전 폴리시 튜닝 가능
+    
+
+The Looper platform
+-------------------
+
+스마트 스트렛티지는 버티컬 ML플랫폼에 의해서 지원되어야하고, 운영 구조 ( 모델 수정과 배포 최초평가와 지속적인 제품 효과의 측정, 전반적인 유지관리을 위한 수립된 절차와 규약) 를 필요로 함.
+
+### 플랫폼 철학
+
+**decision space** 는 스마트 스트렛티지에 의해서 만들어 질수 있는 애플리케이션 내의 결정의 형태를 표현, 강화 학습에서 결정 공간은 action space 의 개념과 잘 맞음. 알림을 줄지 말지에 대한 단순한 바이너리 값일 수 있고, 캐시 엔트리의 ttl값을 위한 연속 값일수 있고, 라이브 비디오 스트림 엔코더 같은 소프트웨어 시스템의 데이터 구조의 설정 값 일 수 있음
+
+**applcation context** 결정 공간에서 선택을 만들기 위해 추론 시간에 소프트웨어 시스템에서 제공하는 필요한 핵심 정보. 바로 피쳐로 쓰일수도 있고, 피쳐 스토어에서 피쳐를 추출하기 위한 키를 포함할 수도 있음
+
+**product metrics** 스마트 스트렛티지와 응용의 성능을 평가. 제품 지표에 의해서 특정 결정이 판단될때, 장기 목표를 추적하는 메트릭들과 달리 지도학습을 위한 라벨을 생성 할수 있음
+
+**A proxy ML task** 제품 목표를 수학적 형식으로 변환하여서 formal objectives 를 최적화 하는 ML 모델을 재사용하게 하게 하고, ML 예측 을 결정으로 매핑하는 결정 룰을 가능하게 함. 이를 세팅하는 것은 도메인 전문가에 의한 것인데, 이 절차를 플랫폼으로 단순화함
+
+**Evaluation of effects on live data** 프록시 태스크를 푸는 것을 판별하는 것은 물론 제품 지표 향상도 판별. 메타의 모니터링 구조에 접근하여 예측 불가한 부작용 탐지를 도움. 플랫폼에서는 제품 개발자가 결정 공간을 정의하여 플랫폼이 자동적으로 모델타입과 파라미터 세팅을 선택하게 하고, 모델은 배포할수 있기 전까지 유저 영향 없이 라이브 데이터에서 학습하고 평가되고 향상됨. 새롭게 학습된 모델은 제품 사용 전에 작은 트래픽에 배포됨 (canary)
+
+### Platform architecture: the core
+
+전통적인 ML 파이프라인은 오프라인 트레이닝 데이터에서 만드는데, 루퍼는 **라이브 피쳐 스토어**를 사용하여 2가지 점에서 다름
+
+*   **Software-centric vs. data-centric interfaces** 데이터베이스 혹은 파일에서 트레이닝 데이터를 받는 것 보다는 프로덕트 표면에서 루퍼 API 가 결정 포인트를 인터셉트, 로깅. 제품 엔지니어의 학습 데이터 질의 고려사항을 위임 할 수 있음
+    
+*   **An online-first approach** 루퍼 API 는 라이브 피쳐와 라벨을 결정과 피드백 포인트에서 로그 하여서, 실시간 스트림 프로세싱을 통해서 조인하고 필터. 데이터 hygiene 이슈와 스토리지 오버헤드 이슈를 immediate materialization으로 회피 (학습 과 추론의 일관성 유지, 라벨 과 피쳐를 시간으로 분리해 생기는 라벨 리키지 제한)
+    
+
+#### The Looper RPC API
+
+##### I. getDecision(decision id, application context)
+
+*   결정 공간에서 값을 반환, 예를 들어, 이진 선택에서 true/false 혹은 랭킹에서 소수점 스코어
+    
+*   모델 가용 전이면 널리턴
+    
+*   유저 정의 decision id 는 향후에 로그된 관찰들과 개별적 결정으로 연결
+    
+*   application context 는 애플리케이션 컨텍스트의 딕셔너리 표현, 예를 들어, 유저 아이디(추가 유저 정보 탐색을 위한 사용) 현재 시간 등
+    
+
+##### II. logObservations(decision id, observations)
+
+*   decision id 가 사전에 getDecisioin call 에서 반드시 매치 되어야 하는 프록시 ml 태스크 학습을 위한 labels 로그
+    
+*   observations 는 결정에 반응하는 유저 상호작용 (클릭, 네비게이션 행동) 혹은 계산 비용 과 같은 환경 요인을 캡쳐
+    
+
+![](/assets/3239051731/3239085710.png?width=680)
+
+1.  프로덕트 코드에 루퍼 클라인트 API 가 UI 에서 등록한 알려진 전략중에 하나로 초기화 하고, getDecision() 콜
+    
+2.  루퍼 클라이언트 API 가 피쳐 모델 인스터스 등을 결정하는 전략을 위한 버전화된 설정을 가져오고, 사용된 정확한 버전은 외부 실험 시스템을 통해서 통제 됨
+    
+3.  클라이언트 API 는 애플리케이션 컨텍스트를 메타 피쳐 스토어에 보내서 완전한 피쳐 벡터를 가져옴
+    
+4.  클라이언트 API 는 피쳐 벡터와 제품 모델 ID를 분산 모델 예측 시스템에 보내고, 이는 프록시 태스크 예측을 클라이언트로 가져오고, 디시전 폴리시를 이용해서 최종 의사결정을 만듬. 디시전 폴리시는 도메인 특화 언어로 로직와 공식으로 설정됨
+    
+5.  비동기적으로 익명화된 피쳐 벡터와 예측은 분산 온라인 결합 시스템에 디시전 아이디를 키로 설정들과 상대적으로 짧은 TTL 로 로깅됨. logObservations API 도 이 시스템에 로그를 보냄. 매칭하는 피쳐와 관찰들은 완전한 한줄로 트레이닝 테이블에 로그됨.  
+    이하 절차는 오프라인이고 비동기적임
+    
+6.  지연된 장기 관찰은 테이블에 로그되고, ETL 파이프라인에 의해서 오프라인으로 조인됨. 이 파이프라인들은 강화학습의 MDP 시퀀스를 만드는 것처럼 복잡합 데이터 오퍼레이션 수행함. 로그된 피쳐, 예측, 관찰들은 로깅과 실시간 모니터링을 위해서 보내짐
+    
+7.  오프라인 학습 시스템은 새로운 모델을 밤새 재 학습
+    
+8.  학습된 모델은 온라인 추론을 위해 분산 예측기로 퍼블리싱됨
+    
+9.  모델은 카나링(작은 샘플로 적용)을 위해 등록됨
+    
+10.  이전 모델을 능가하는 카나리 모델은 프로덕션 으로 승격하고, 루프 설정으로 추가됨
+    
+
+#### Platform architecture: The strategy blueprint
+
+**strategy blueprint** 스마트 스트렛티지를 평가하고 만드는 방법을 묘사하는 버전 컨트롤되는 설정. 불변이고 GUI를 통한 변경은 새로운 버전을 만들어서 온라인 실험 플랫폼을 통해서 프로덕션과 평가할수 있고, 롤백이 쉬움. ML 모델 생명주기의 4가지 측면을 통제
+
+*   Feature configuration 피쳐 스토어, 피쳐 그룹으로 관리, 피쳐 트랜스폼 (pre-trained 혹은 SIF) 로 변형 생성, 피처그룹의 컨퓨테이셔날 그래프 포함, 하향 피쳐 변형 포함.
+    
+*   Label configuration 실제 타겟 프로덕 지표의 프록시로 자주 선택됨. 관계를 정확하게 측정하기는 어려움.
+    
+*   Model configuration 상위 레벨 아키텍쳐 파라미터만 명세하고, 나머지는 오토ML로 위임
+    
+*   Policy configuration 가벼운 도메인 명세 언어로 로우 모델의 결과를 최종 결정으로 변환
+    
+
+![](/assets/3239051731/3239904449.png)
+
+1.  실험 시스템은 ab 테스트를 촉진하기 위해서 다른 블루프린트 버전을 유저 집단에 걸쳐서 서빙
+    
+2.  클라이언트 API 는 완전한 피쳐 벡터를 피쳐 스토어로부터 가져오기 위해서 블루프린트 피쳐 설정 이용
+    
+3.  완전한 학습 예제는 트레이닝 테이블에 로깅되고, 원래 블루프린트 버전과 태깅
+    
+4.  트레이닝 시스템은 블루프린트 피쳐, 라벨, 모델 설정에 따라 파이프라인을 실행하고, 호환 버전에 의해 데이터를 필터함. 폴리시 설정도 필요할수 있음
+    
+5.  학습된 모델은 블루프린트 버전에 퍼블리싱됨, 추론을 위해서 명시적으로 연결된 모델을 그에 제공된 블루프린트 버전만 사용할 수 있음. 마지막 제품 직면 결정을 위해서 폴리시 설정 사용함
+    
+
+#### Platform architecture: specializations
+
+*   **랭킹** 일반적으로 추천에서 getDecision 과 logObservation 으로 충분하지만, 진보된 시스템의 정교한 지원을 위해서 positional bias를 고려하여 특화된 getRanking API 가 있음, 위치, 시간등을 기록
+    
+*   **Integrated experiment optimizations** 프로덕트 메트릭이 잘 근사되어도, 모델로 찾은 연관성이 제품 향상을 이끌지 않는 경우들있어서, a/b 테스트는 여러 제품 유저를 변경하여 average treatment effect 를 평가함. 제품 지표의 공유된 저장소, 동시 실험의 기계적인 탐색이 일반적임. heterogeneous treatment effects (HTE) 문제. 루퍼는 메타 온라인 실험 플랫폼으로 지원함. 특화된 HTE 모델 학습
